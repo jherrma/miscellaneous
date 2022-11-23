@@ -57,7 +57,7 @@ echo "127.0.1.1 $username.localdomain $username" >> /etc/hosts
 
 echo "Installing system"
 echo "Installing iwd. If WIFI is not auto connection change setting in /etc/iwd/main.conf"
-pacman -S --no-confirm grub efibootmgr networkmanager network-manager-applet networkmanager-openvpn iwd mtools dialog dosfstools reflector linux-lts-headers avahi xdg-user-dirs xdg-utils gvfs gvfs-smb nfs-utils ntfs-3g inetutils dnsutils blueman bluez-tools alsa-utils alsa-plugins alsa-firmware alsa-oss openssh rsync htop acpi acpid nss-mdns git pipewire pipewire-alsa pipewire-pulse xdg-desktop-portal-gtk gst-plugin-pipewire man-db man-pages 
+pacman -S --noconfirm grub efibootmgr networkmanager network-manager-applet networkmanager-openvpn iwd mtools dialog dosfstools reflector linux-lts-headers avahi xdg-user-dirs xdg-utils gvfs gvfs-smb nfs-utils ntfs-3g inetutils dnsutils blueman bluez-tools alsa-utils alsa-plugins alsa-firmware alsa-oss openssh rsync htop acpi acpid nss-mdns git pipewire pipewire-alsa pipewire-pulse xdg-desktop-portal-gtk gst-plugin-pipewire man-db man-pages 
 echo "Install done\n\n"
 
 
@@ -134,12 +134,12 @@ fi
 if [ "$desktop" = "gnome" ] || [ "$desktop" = "kde" ];
 then
 	echo "Installing basic desktop packages"
-	sudo pacman -S --no-confirm flatpak firefox xournalpp papirus-icon-theme noto-fonts ttf-opensans cups system-config-printer adobe-source-code-pro-fonts
+	sudo pacman -S --noconfirm flatpak firefox xournalpp papirus-icon-theme noto-fonts ttf-opensans cups system-config-printer adobe-source-code-pro-fonts
 	sudo systemctl enable cups.socket
 fi
 
 echo "Installing linux headers"
-sudo pacman -S --no-confirm linux-lts-headers
+sudo pacman -S --noconfirm linux-lts-headers
 
 
 echo "Exiting chroot and unmounting drives"
