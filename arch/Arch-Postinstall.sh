@@ -11,7 +11,7 @@ cd
 echo "Installing Paru done\n\n"
 
 echo "Installing zramd"
-paru -S --no-confirm zramd
+paru -S --noconfirm zramd
 sudo systemctl enable --now zramd.service
 
 
