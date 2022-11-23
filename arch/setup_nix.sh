@@ -16,3 +16,5 @@ sudo usermod -aG nix-users $USER
 
 nix-channel --add https://nixos.org/channels/nixpkgs-unstable
 nix-channel --update
+
+echo 'export PATH=~/.nix-profile/bin:$PATH\n' >> ~/.zshrc
