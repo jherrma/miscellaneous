@@ -83,6 +83,10 @@ systemctl enable reflector.timer
 echo "Adding user"
 useradd -mU -s /bin/zsh -G sys,log,network,floppy,scanner,power,rfkill,users,video,storage,optical,lp,audio,wheel,adm $username
 passwd $username
+
+echo "In the next step you need to add yourself to the sudo users. Uncomment '%wheel ALL=(ALL) ALL'"
+echo "Press return to coninue"
+read tmp
 EDITOR=nano visudo
 
 echo "Mkinitcpio linux-lts"
