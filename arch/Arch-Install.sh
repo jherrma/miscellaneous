@@ -32,6 +32,9 @@ then
 fi 
 echo "You chose $desktop"
 
+echo "Updating mirrors"
+reflector --country Germany,Netherlands,Austria --age 12 --protocol https --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
+
 echo "Installing Arch Base into /mnt"
 pacstrap /mnt base base-devel linux-lts linux-firmware $cpu-ucode sysfsutils btrfs-progs cryptsetup device-mapper dhcpcd dialog e2fsprogs grml-zsh-config grub gptfdisk less lvm2 mkinitcpio nano neofetch netctl nvme-cli os-prober zsh vim
 echo "Done installing Arch Base\n\n"
