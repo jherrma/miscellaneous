@@ -1,7 +1,11 @@
 #!/bin/bash
-sudo flatpak install flathub com.brave.Browser
-sudo flatpak install flathub com.github.tchx84.Flatseal
-sudo flatpak install flathub im.riot.Riot
-sudo flatpak install flathub org.gnome.World.Secrets
-sudo flatpak install flathub org.onlyoffice.desktopeditors
-sudo flatpak install flathub org.videolan.VLC
+sudo flatpak install flathub com.brave.Browser \
+    com.github.tchx84.Flatseal \
+    im.riot.Riot \
+    org.gnome.World.Secrets \
+    org.onlyoffice.desktopeditors \
+    org.videolan.VLC \
+    org.gnome.World.PikaBackup \
+    io.gitlab.adhami3310.Impression
+
+echo "done"
