@@ -5,6 +5,6 @@ sudo flatpak install flathub com.brave.Browser \
     org.gnome.World.Secrets \
     org.onlyoffice.desktopeditors \
     org.videolan.VLC \
-    io.gitlab.adhami3310.Impression \
-    org.nickvision.tubeconverter
+    org.nickvision.tubeconverter \
+    net.nokyan.Resources
 echo "done"
