@@ -39,6 +39,107 @@ command line and press Enter.
 | Open git diff view | `<leader>gd` |
 | Close git diff view | `<leader>gq` |
 | Format code | `<leader>f` (also automatic on save for `.zig` / `.zon`) |
+| Search | `/text` then Enter |
+| Next / previous match | `n` / `N` |
+| Clear the search highlight | `:noh` then Enter |
+
+---
+
+## Getting fluent
+
+Two habits make Vim feel fast. Everything else is detail.
+
+### 1. Never guess a count - read it off the gutter
+
+This config has `relativenumber` on, so every line is labelled with the exact
+count needed to reach it. The cursor line shows its real number; everything
+else shows its distance.
+
+```
+  4  const std = @import("std");
+  3
+  2  pub fn main() !void {
+  1      const x = 42;
+42           return doThing(x);      <- cursor sits here
+  1  }
+  2
+  3  fn doThing(v: u32) u32 {
+```
+
+Want `pub fn main`? It says `2`, so press `2k`. Delete down to `fn doThing`?
+It says `3`, so `d3j`. Glance, read, type - no guessing, no `30j` that
+overshoots.
+
+### 2. Never press `h` or `l`
+
+Treat them as broken. Moving one character at a time is the single biggest
+thing that makes Vim feel slow. Use word motions and `f` instead:
+
+| Instead of | Use |
+| --- | --- |
+| `llll...` | `w` (next word) or `f<char>` (jump to a character) |
+| `hhhh...` | `b` (back a word) or `F<char>` |
+| `lll` to the end of the line | `$` |
+| `hhh` to the start | `^` |
+| Hunting for a bracket | `%` (jump to its match) |
+
+`f` is the workhorse: `f(` lands on the next `(`, and `;` repeats the jump.
+`f"` `;` `;` crosses three quotes in four keystrokes.
+
+### 3. Prefer search over counting for anything far away
+
+| Instead of | Do |
+| --- | --- |
+| `30j` to reach a function | `/doThing` then Enter |
+| Scrolling to find a variable | put the cursor on it and press `*` |
+| `40j` to the bottom | `G` |
+| Paging through a file | `<C-d>` a few times, then `/` or a small count |
+
+Search is a *motion*, so operators combine with it: `d/return` then Enter
+deletes everything from the cursor to the next `return`. `<C-o>` always takes
+you back to where you started.
+
+### 4. Stop moving, start operating
+
+The real shift. Most of the time you don't want to *go* somewhere, you want to
+*change* something - and text objects do both at once. They work from anywhere
+inside the target, so there is no navigating and no selecting:
+
+| Cursor is | Type | Result |
+| --- | --- | --- |
+| anywhere in a word | `ciw` | replace that word |
+| anywhere inside `"..."` | `ci"` | replace the string contents |
+| anywhere inside `(...)` | `ci(` | replace the arguments |
+| anywhere in a `{...}` block | `di{` | delete the block body |
+| anywhere in a paragraph | `yap` | yank the whole paragraph |
+
+`i` means *inner* (contents only), `a` means *around* (contents plus the
+delimiters). Swap the verb for any operator: `d` delete, `c` change, `y` yank,
+`>` indent, `gU` uppercase.
+
+Then `.` repeats the last change. `ciw`, type the replacement, `<Esc>`, then
+`n` `.` `n` `.` walks through the rest of the file - search and replace with a
+look at each one before you commit.
+
+### The mental model
+
+Vim is a language, not a pile of shortcuts. `d` is a verb, `w` / `}` / `/foo`
+are nouns, `i` and `a` are adjectives. `d2f)` reads as "delete through the
+second `)`" - nobody memorised that, it is composed from parts. Learn the small
+grammar and the combinations come free.
+
+### How to actually practise
+
+Don't absorb this whole file. Take two things a week and use them even when
+they feel slower:
+
+1. **Week 1** - relative counts (`5j`, `3k`) and `f<char>`. Ban `h` and `l`.
+2. **Week 2** - `ciw` and `ci"`. Stop entering insert mode with `i` at a word's start.
+3. **Week 3** - `/` to navigate, `<C-o>` to come back.
+4. **Week 4** - `.` to repeat, `*` to hunt the symbol under the cursor.
+
+Run `:Tutor` inside Neovim - it is built in, takes about 25 minutes, and drills
+exactly these. Worth doing twice.
 
 ---
 
@@ -121,19 +222,64 @@ pastes with Ctrl+V elsewhere, and vice versa.
 
 ## Search and replace
 
+### Searching
+
 | Key | Does |
 | --- | --- |
-| `/text` / `?text` | search forward / backward |
-| `n` / `N` | next / previous match |
-| `*` / `#` | search for the word under the cursor forward / backward |
-| `:noh` | clear the search highlight |
-| `:%s/old/new/g` | replace in the whole file |
-| `:%s/old/new/gc` | same, confirming each one |
+| `/text` then `<CR>` | search **forward** for `text` |
+| `?text` then `<CR>` | search **backward** |
+| `*` / `#` | search for the word under the cursor, forward / backward |
+
+While you are typing the query the matches highlight live (`incsearch`), and
+the view scrolls to the first one - but the cursor has not actually moved yet.
+
+### Jumping between matches
+
+Press `<CR>` first to accept the search. Then:
+
+| Key | Does |
+| --- | --- |
+| `n` | jump to the **next** match |
+| `N` | jump to the **previous** match |
+| `<C-o>` | jump back to where you were before searching |
+
+Search wraps around the end of the file (`wrapscan`), so `n` keeps cycling
+forever and never dead-ends. Watch for the `search hit BOTTOM, continuing at
+TOP` message - that is how you know you have been round once.
+
+### Getting out of a search
+
+There is no "search mode" to escape once you have pressed `<CR>` - you have
+simply moved the cursor, and you are back in normal mode already. What people
+usually mean by "exit search" is one of these three:
+
+| Situation | Do |
+| --- | --- |
+| Still typing the query, want to abandon it | `<Esc>` - cursor never moves |
+| Done searching, want the yellow highlight gone | `:noh` then `<CR>` |
+| Want to return to where you started | `<C-o>` (or `` `` ``) |
+
+The highlight (`hlsearch`) stays on after you stop - that is deliberate, so you
+can see every match while you work. `:noh` clears it until the next search; it
+changes nothing else.
+
+### Case
+
+Searches ignore case until you type a capital letter, then they become
+case-sensitive (`ignorecase` + `smartcase`). So `/error` finds `Error` and
+`ERROR`, but `/Error` finds only `Error`.
+
+### Replacing
+
+| Command | Does |
+| --- | --- |
+| `:%s/old/new/g` | replace every occurrence in the file |
+| `:%s/old/new/gc` | same, but confirm each one (`y` / `n` / `a` / `q`) |
 | `:s/old/new/g` | replace on the current line only |
+| `:'<,'>s/old/new/g` | replace inside a visual selection (the range is filled in for you) |
 
-Search is case-insensitive until you type a capital (`ignorecase` + `smartcase`).
-
----
+`%` means the whole file, `g` means every match on each line rather than just
+the first, `c` means confirm.
 
 ## LSP — code intelligence
 
