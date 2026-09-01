@@ -9,6 +9,28 @@ nvim-cmp completion, treesitter, tokyonight.
 | `lua/plugins.lua` | the lazy.nvim plugin spec |
 | `lazy-lock.json` | pinned plugin commits, so a fresh machine gets the same versions |
 
+## Keymaps
+
+See **[rusty-memory-refresher.md](rusty-memory-refresher.md)** - the full cheat
+sheet for this config, from `$` and `gg` up through LSP, the file tree and the
+git diff view. The essentials:
+
+| Key | Action |
+| --- | --- |
+| `<C-n>` / `<leader>n` | toggle file tree / reveal current file |
+| `<leader>gd` / `<leader>gq` | open / close the git diff view |
+| `gd` `gi` `<C-o>` | goto definition, goto implementation, go back |
+| `<leader>f` | format buffer (also on save for Zig) |
+
+The tree and diff view render Nerd Font icons. Fedora does not package the
+Nerd Fonts, so `fedora/install-nerd-font.sh` fetches JetBrainsMono into
+`~/.local/share/fonts`; `fedora/install-neovim.sh` calls it automatically. On
+Arch the equivalent is `pacman -S ttf-jetbrainsmono-nerd`. Select the font in
+your terminal profile afterwards - Neovim has no font setting of its own.
+
+`<C-w>` is left alone as Vim's window prefix, and `<leader>e` stays bound to
+diagnostics, so the tree uses `<C-n>` (the nvim-tree convention).
+
 Requires **Neovim 0.11+** (`vim.lsp.config()`, `vim.diagnostic.jump()`).
 
 ## Install on a new machine
