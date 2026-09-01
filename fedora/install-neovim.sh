@@ -18,4 +18,7 @@ if ! command -v zls >/dev/null 2>&1; then
   echo "      https://github.com/zigtools/zls/releases if you write Zig."
 fi
 
+# The Neovim config renders file-tree and git icons that need a Nerd Font.
+"$REPO_ROOT/fedora/install-nerd-font.sh"
+
 "$REPO_ROOT/distro-independent/install-neovim-config.sh" "$@"

@@ -5,6 +5,11 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- nvim-tree replaces the built-in file explorer; disable netrw so the two
+-- don't both try to handle directory arguments.
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- ── Editor options ─────────────────────────────────────────────────────────
 local opt = vim.opt
 opt.number = true
