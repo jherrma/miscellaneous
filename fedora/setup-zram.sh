@@ -21,7 +21,7 @@ ZRAM_SIZE="min(ram, 8192)"
 # zstd compresses noticeably better than the lzo-rle default for a little CPU.
 ZRAM_ALGORITHM="zstd"
 # zram is RAM-fast, so swapping out early is cheap. Kernel max is 200.
-SWAPPINESS=180
+SWAPPINESS=120
 # Swap readahead is wasted work when the "disk" is memory.
 PAGE_CLUSTER=0
 # -----------------------------------------------------------------------------
