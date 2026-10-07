@@ -1,0 +1,4 @@
+  "statusLine": {
+    "type": "command",
+    "command": "jq -r '\"\\(.model.display_name) [\\(.effort.level //\"default\")]\"'"
+  },
