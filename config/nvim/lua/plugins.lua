@@ -153,17 +153,52 @@ return {
   },
 
   -- Syntax-aware highlighting / indentation ------------------------------------
+  -- `main` branch: `master` is archived and its query predicates break on
+  -- Neovim 0.12 (error in set-lang-from-info-string! when hover opens markdown).
+  -- Needs the `tree-sitter` CLI to compile parsers.
   {
     "nvim-treesitter/nvim-treesitter",
-    branch = "master",            -- stable API; `main` is the in-progress rewrite
+    branch = "main",
+    lazy = false,                 -- main does not support lazy-loading
     build = ":TSUpdate",
     config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = { "zig", "lua", "vimdoc" },
-        auto_install = true,
-        highlight = { enable = true },
-        indent = { enable = true },
+      local ts = require("nvim-treesitter")
+      ts.setup({})
+      -- markdown + markdown_inline render LSP hover floats.
+      ts.install({ "zig", "lua", "vimdoc", "c_sharp", "python", "markdown", "markdown_inline" })
+
+      -- main no longer auto-enables anything: start highlighting / indent per filetype.
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("treesitter-start", { clear = true }),
+        callback = function(args)
+          if pcall(vim.treesitter.start, args.buf) then
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
       })
+    end,
+  },
+
+  -- C# language server (Roslyn) -------------------------------------------------
+  -- mason downloads the `roslyn-language-server` binary (:MasonInstall
+  -- roslyn-language-server); roslyn.nvim finds it and starts it for .cs files.
+  -- Needs the `dotnet` SDK on PATH.
+  {
+    "mason-org/mason.nvim",
+    cmd = { "Mason", "MasonInstall", "MasonUpdate" },
+    opts = {},
+  },
+  {
+    "seblyng/roslyn.nvim",
+    ft = "cs",
+    dependencies = { "mason-org/mason.nvim" },
+    config = function()
+      -- Same completion capabilities as ZLS (see init.lua).
+      local ok_cmp, cmp_lsp = pcall(require, "cmp_nvim_lsp")
+      if ok_cmp then
+        vim.lsp.config("roslyn", { capabilities = cmp_lsp.default_capabilities() })
+      end
+      require("roslyn").setup({})
     end,
   },
 }
