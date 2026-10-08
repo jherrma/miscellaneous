@@ -218,6 +218,10 @@ with any motion or text object:
 Clipboard is `unnamedplus`, so yanks go to the system clipboard — `y` here
 pastes with Ctrl+V elsewhere, and vice versa.
 
+Replace a selection: select it (`v` + motion), then `c` and type the new text.
+To replace it with what you just yanked, select it and press `p`.
+Replace the word under the cursor with the clipboard: `viwp`.
+
 ---
 
 ## Search and replace
@@ -283,7 +287,11 @@ the first, `c` means confirm.
 
 ## LSP — code intelligence
 
-Attached automatically for Zig via ZLS.
+Attached automatically per filetype: Zig via ZLS, C# via Roslyn, Python via Pyright. The keys below
+are the same for every language server — they are bound once, when any server
+attaches. What differs is the *content*: the code-action menu, hover text and
+diagnostics come from whichever server is attached (`:LspInfo` shows which).
+Pyright is installed through Mason (`:Mason`) and needs Node.
 
 | Key | Does |
 | --- | --- |
@@ -301,6 +309,34 @@ Attached automatically for Zig via ZLS.
 
 Formatting uses the LSP formatter when one is attached, and falls back to
 `zig fmt` for `.zig`/`.zon` files. On save, only the LSP path runs.
+
+### Fixing diagnostics and hints (`<leader>e`, `<leader>ca`)
+Hints such as an unused `using` show greyed out with a message at the line end.
+
+| Key | Does |
+| --- | --- |
+| `<leader>e` | full diagnostic text in a float (long messages wrap) |
+| `]d` / `[d` | next / previous diagnostic |
+| `<leader>ca` | code actions for the cursor line — the quick fixes live here |
+
+Cursor on the greyed-out `using` → `<leader>ca` → **Remove unnecessary usings**
+→ `<CR>`. It clears every unused `using` in the file, not only that line. The
+same menu offers *add missing using*, *generate method* and other fixes.
+
+Remove and sort all usings in the whole file (Roslyn's organize-imports):
+```vim
+:lua vim.lsp.buf.code_action({ context = { only = { "source.organizeImports" } }, apply = true })
+```
+
+### C# (Roslyn)
+- Server is `roslyn-language-server`, installed by Mason (`:Mason`), started by
+  `roslyn.nvim` when you open a `.cs` file. Needs the `dotnet` SDK on PATH.
+- Open files inside a project (`.sln` / `.csproj` found upward); a loose `.cs`
+  file gets only limited analysis.
+- Highlighting comes from the treesitter `c_sharp` parser.
+- Error `Client roslyn quit with exit code 1` + `--daemon-mode` in
+  `~/.local/state/nvim/lsp.log`: server is older than the plugin — update it
+  with `:Mason` (select `roslyn-language-server`, press `u`/`i`).
 
 ### Completion (insert mode)
 | Key | Does |
@@ -415,12 +451,30 @@ Undo is persistent (`undofile`), so `u` still works after reopening a file.
 
 ---
 
+## Finding shortcuts
+
+There is no `:shortcuts` command; these are the built-in ways to look keys up.
+
+| Command | Does |
+| --- | --- |
+| `:Tutor` | interactive beginner tutorial (~25 min) |
+| `:help index` | every default key, grouped by mode |
+| `:help <key>` | e.g. `:help gd`, `:help CTRL-W_v` |
+| `:nmap` / `:vmap` / `:imap` | all current mappings for normal / visual / insert mode |
+| `:verbose nmap <leader>ca` | what a key does and which file set it |
+
+This file is the quick reference for this config.
+
+---
+
 ## Housekeeping
 
 | Command | Does |
 | --- | --- |
 | `:Lazy` | plugin manager UI |
 | `:Lazy update` | update plugins — rewrites `lazy-lock.json` |
+| `:Mason` | language-server installer UI (C# Roslyn lives here) |
+| `:TSUpdate` | update treesitter parsers |
 | `:checkhealth` | diagnose a broken setup |
 | `:LspInfo` | which language server is attached |
 | `:Inspect` | what highlight group is under the cursor |

@@ -35,6 +35,10 @@ Requires **Neovim 0.11+** (`vim.lsp.config()`, `vim.diagnostic.jump()`).
 
 ## Install on a new machine
 
+Language servers (Roslyn, Pyright, ZLS) are mostly **not** installed by the
+scripts below - see **[LANGUAGE-SERVERS.md](LANGUAGE-SERVERS.md)** for what to
+install by hand.
+
 ```bash
 ./arch/install-neovim.sh            # or: ./fedora/install-neovim.sh
 ```

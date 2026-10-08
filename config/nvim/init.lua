@@ -67,6 +67,20 @@ vim.lsp.config("zls", {
 })
 vim.lsp.enable("zls")
 
+-- ── LSP: Pyright (Python) ────────────────────────────────────────────────────
+-- Binary comes from Mason (:Mason -> pyright). Use the absolute path because
+-- Mason is lazy-loaded and its bin dir is not on PATH until it loads.
+vim.lsp.config("pyright", {
+  cmd = { vim.fn.stdpath("data") .. "/mason/bin/pyright-langserver", "--stdio" },
+  filetypes = { "python" },
+  root_markers = { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", "pyrightconfig.json", ".git" },
+  capabilities = capabilities,
+  settings = {
+    python = { analysis = { autoSearchPaths = true, useLibraryCodeForTypes = true } },
+  },
+})
+vim.lsp.enable("pyright")
+
 -- Buffer-local keymaps once a language server attaches.
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("zig-lsp-attach", { clear = true }),
