@@ -1,4 +1,4 @@
-  "statusLine": {
+"statusLine": {
     "type": "command",
-    "command": "jq -r '\"\\(.model.display_name) [\\(.effort.level //\"default\")]\"'"
+    "command": "bash ~/.claude/statusline.sh"
   },
