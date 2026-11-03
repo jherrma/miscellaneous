@@ -15,6 +15,8 @@ Applied on top of the upstream arkenfox file. Search the file for these names.
 - **No clearing at shutdown:** `privacy.sanitize.sanitizeOnShutdown` = false. Clear-history flags reset to Firefox defaults (`privacy.clearOnShutdown_v2.*`, `privacy.clearSiteData.*`, `privacy.clearHistory.*`, `privacy.sanitize.timeSpan` = 1).
 - **Restore previous session on start:** `browser.startup.page` = 3, `browser.startup.homepage` = `about:home`, `browser.sessionstore.privacy_level` = 0 (2 blocks session restore).
 - **Disk cache on:** `browser.cache.disk.enable` = true.
+- **Toolbar layout pinned:** `browser.uiCustomization.state` is copied from the profile's `prefs.js`, with the sidebar button removed from the nav bar. Any toolbar change in Firefox is reset on the next start until this line is updated.
+- **Downloads button always visible:** `browser.download.autohideButton` = false. The Firefox default hides it when idle.
 - **Fingerprint resistance off:** `privacy.resistFingerprinting` = false, appended at the end of the file. With it on, the colonist.io game board rendered black. This removes fingerprint resistance for every site.
 
 ## Installing on a new profile
