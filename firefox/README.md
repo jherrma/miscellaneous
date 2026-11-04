@@ -5,7 +5,7 @@ Files here reproduce my Firefox setup on a new machine or profile.
 | File | What it is |
 |---|---|
 | `user.js` | The file my Firefox profile uses now: arkenfox user.js v144 (dated 21 April 2026) with my local changes |
-| `my-ublock-backup_2026-11-02_21.02.00.json` | uBlock Origin 1.75.2 settings export (filter lists, whitelist, dynamic rules, user filters) |
+| `my-ublock-backup_2026-11-04_18.46.20.txt` | uBlock Origin 1.75.2 settings export (filter lists, whitelist, dynamic rules, user filters) |
 
 ## Local changes in user.js
 
@@ -26,7 +26,7 @@ Applied on top of the upstream arkenfox file. Search the file for these names.
 3. Copy `user.js` into that profile folder. Firefox reads it at every start.
 4. Start Firefox. Check `about:support` → Profile Directory to confirm the right profile.
 5. Install uBlock Origin from addons.mozilla.org if it isn't there yet.
-6. In uBlock Origin, open the dashboard → Settings → Restore backup, and select the `my-ublock-backup_*.json` file. Only restore onto a fresh uBlock Origin install, because the backup overwrites its current settings.
+6. In uBlock Origin, open the dashboard → Settings → Restore backup, and select the `my-ublock-backup_*.txt` file. Only restore onto a fresh uBlock Origin install, because the backup overwrites its current settings.
 
 Firefox does not read `user.js` from this folder on its own. It only takes effect once copied into a profile.
 
