@@ -9,14 +9,15 @@ return {
     priority = 1000,   -- load before other plugins so highlights are set first
     config = function()
       require("tokyonight").setup({
-        style = "day",            -- light theme; others: "storm" | "night" | "moon"
+        style = "storm",            -- light theme; others: "storm" | "night" | "moon"
         on_highlights = function(hl, c)
           -- The light theme's default comment grey is very faint on white;
           -- darken it so comments stay legible in daylight.
           hl.Comment = { fg = "#616587", italic = true }
         end,
       })
-      vim.cmd.colorscheme("tokyonight")
+      --vim.cmd.colorscheme("tokyonight")
+      vim.cmd.colorscheme("habamax")
     end,
   },
 
