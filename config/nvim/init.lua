@@ -81,6 +81,28 @@ vim.lsp.config("pyright", {
 })
 vim.lsp.enable("pyright")
 
+-- ── LSP: JSON (vscode-json-language-server, Mason package `json-lsp`) ────────
+vim.lsp.config("jsonls", {
+  cmd = { vim.fn.stdpath("data") .. "/mason/bin/json-lsp", "--stdio" },
+  filetypes = { "json", "jsonc" },
+  root_markers = { ".git" },
+  capabilities = capabilities,
+  init_options = { provideFormatter = true },
+})
+vim.lsp.enable("jsonls")
+
+-- ── LSP: YAML (yaml-language-server, Mason package `yaml-language-server`) ──
+vim.lsp.config("yamlls", {
+  cmd = { vim.fn.stdpath("data") .. "/mason/bin/yaml-language-server", "--stdio" },
+  filetypes = { "yaml", "yaml.docker-compose", "yaml.gitlab" },
+  root_markers = { ".git" },
+  capabilities = capabilities,
+  settings = {
+    yaml = { format = { enable = true } },
+  },
+})
+vim.lsp.enable("yamlls")
+
 -- Buffer-local keymaps once a language server attaches.
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("zig-lsp-attach", { clear = true }),
@@ -102,20 +124,20 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 -- ── Formatting ───────────────────────────────────────────────────────────────
--- Format the current buffer: use the LSP formatter when a server with
--- formatting support is attached; otherwise fall back to `zig fmt` for Zig.
-local function format_buffer()
-  for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+-- Format the current buffer with the attached LSP server's formatter. No
+-- fallback: if no attached server can format this filetype, warn and do nothing.
+local function has_formatter(bufnr)
+  for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
     if client.server_capabilities and client.server_capabilities.documentFormattingProvider then
-      vim.lsp.buf.format({ timeout_ms = 2000 })
-      return
+      return true
     end
   end
-  local ft = vim.bo.filetype
-  if ft == "zig" or ft == "zon" then
-    vim.cmd("silent write")                 -- zig fmt rewrites the file on disk
-    vim.fn.system({ "zig", "fmt", vim.api.nvim_buf_get_name(0) })
-    vim.cmd("silent edit")                  -- reload the formatted result
+  return false
+end
+
+local function format_buffer()
+  if has_formatter(0) then
+    vim.lsp.buf.format({ timeout_ms = 2000 })
   else
     vim.notify("No formatter available for this buffer", vim.log.levels.WARN)
   end
@@ -124,18 +146,13 @@ end
 -- Manual format shortcut.
 vim.keymap.set("n", "<leader>f", format_buffer, { desc = "Format buffer" })
 
--- Format on save too.
+-- Format on save for the filetypes that have a formatting server.
 vim.api.nvim_create_autocmd("BufWritePre", {
-  group = vim.api.nvim_create_augroup("zig-format", { clear = true }),
-  pattern = { "*.zig", "*.zon" },
-  callback = function()
-    -- Only the LSP path is safe in BufWritePre; the zig-fmt fallback writes
-    -- the file itself, so leave that to the manual <leader>f shortcut.
-    for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
-      if client.server_capabilities and client.server_capabilities.documentFormattingProvider then
-        vim.lsp.buf.format({ timeout_ms = 2000 })
-        return
-      end
+  group = vim.api.nvim_create_augroup("format-on-save", { clear = true }),
+  pattern = { "*.zig", "*.zon", "*.json", "*.jsonc", "*.yaml", "*.yml" },
+  callback = function(args)
+    if has_formatter(args.buf) then
+      vim.lsp.buf.format({ bufnr = args.buf, timeout_ms = 2000 })
     end
   end,
 })

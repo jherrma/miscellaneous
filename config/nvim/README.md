@@ -20,7 +20,7 @@ git diff view. The essentials:
 | `<C-n>` / `<leader>n` | toggle file tree / reveal current file |
 | `<leader>gd` / `<leader>gq` | open / close the git diff view |
 | `gd` `gi` `<C-o>` | goto definition, goto implementation, go back |
-| `<leader>f` | format buffer (also on save for Zig) |
+| `<leader>f` | format buffer via the attached LSP server (also on save for Zig, JSON, YAML) |
 
 The tree and diff view render Nerd Font icons. Fedora does not package the
 Nerd Fonts, so `fedora/install-nerd-font.sh` fetches JetBrainsMono into

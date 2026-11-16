@@ -166,7 +166,7 @@ return {
       local ts = require("nvim-treesitter")
       ts.setup({})
       -- markdown + markdown_inline render LSP hover floats.
-      ts.install({ "zig", "lua", "vimdoc", "c_sharp", "python", "markdown", "markdown_inline" })
+      ts.install({ "zig", "lua", "vimdoc", "c_sharp", "python", "json", "yaml", "markdown", "markdown_inline" })
 
       -- main no longer auto-enables anything: start highlighting / indent per filetype.
       vim.api.nvim_create_autocmd("FileType", {

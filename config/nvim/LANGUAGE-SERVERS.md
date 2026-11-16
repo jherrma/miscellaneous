@@ -92,7 +92,19 @@ imports show as unresolved.
 | Config | `vim.lsp.config("zls", ...)` in `init.lua`; runs `zls` from `PATH` |
 | Parser | `zig`, installed automatically |
 
-`<leader>f` falls back to `zig fmt` when no LSP formatter is attached.
+`<leader>f` formats through ZLS only. There is no `zig fmt` fallback: if the
+attached server cannot format, you get a warning and nothing changes.
+
+## 6. JSON and YAML
+
+| Need | Detail |
+| --- | --- |
+| Servers | `:MasonInstall json-lsp yaml-language-server` |
+| Config | `vim.lsp.config("jsonls", ...)` and `vim.lsp.config("yamlls", ...)` in `init.lua`; use `~/.local/share/nvim/mason/bin/` |
+| Parsers | `json` and `yaml`, installed automatically |
+
+Both servers provide formatting. `<leader>f` and format-on-save use them. The
+JSON server also handles `jsonc`.
 
 ## Verify everything
 
