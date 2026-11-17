@@ -1,0 +1,58 @@
+# KDE Plasma (Wayland) desktop, installed by desktop-setup.sh.
+
+# Plasma 6.8 meta package. Includes plasma-login-manager, plasma-nm, bluedevil,
+# plasma-pa, powerdevil, kwallet-pam, print-manager, spectacle, systemsettings,
+# xdg-desktop-portal-kde and more. No sddm, xorg or xorg-server needed.
+plasma-meta
+
+# Wayland
+qt6-wayland
+xorg-xwayland      # runs legacy X11 apps
+wl-clipboard       # clipboard CLI; apps like Claude Code read images through it
+
+# Audio: PipeWire replaces PulseAudio (pipewire-pulse speaks the PulseAudio protocol).
+# Do not install the pulseaudio package, it conflicts with pipewire-pulse.
+pipewire
+pipewire-alsa
+pipewire-pulse
+pipewire-jack       # without it pacman picks jack2 for ffmpeg/mpv and JACK bypasses PipeWire
+wireplumber
+gst-plugin-pipewire
+alsa-utils
+alsa-firmware
+sof-firmware
+
+# Graphics: Vulkan driver for the GPU (AMD here; use vulkan-intel for Intel,
+# nvidia-utils for NVIDIA). Nothing else depends on one, so list it explicitly.
+vulkan-radeon
+
+# KDE applications
+dolphin
+konsole
+ghostty
+gwenview
+ark
+kate
+kio-extras
+kio-admin
+ffmpegthumbs                # video thumbnails in Dolphin
+kdegraphics-thumbnailers    # PDF and image thumbnails in Dolphin
+
+# AppImage support (fuse2 is needed to run AppImages; Gear Lever from Flatpak manages them)
+fuse2
+
+# GTK app integration
+xdg-desktop-portal-gtk
+gvfs
+gvfs-smb
+gvfs-mtp
+
+# Printing (cups.socket is enabled by the script; print-manager comes with plasma-meta)
+cups
+
+# Fonts and icons
+noto-fonts
+noto-fonts-emoji
+ttf-opensans
+adobe-source-code-pro-fonts
+papirus-icon-theme

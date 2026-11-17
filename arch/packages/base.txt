@@ -1,0 +1,55 @@
+# Minimal base system, installed by install-base.sh via pacstrap.
+# The CPU microcode package (amd-ucode / intel-ucode) is added by the script.
+
+# Core
+base
+base-devel
+linux-lts
+linux-lts-headers
+linux-firmware
+
+# Filesystems and disks
+btrfs-progs
+e2fsprogs
+dosfstools
+mtools
+ntfs-3g
+nfs-utils
+gptfdisk
+cryptsetup
+lvm2
+sysfsutils
+nvme-cli
+
+# Bootloader
+grub
+efibootmgr
+
+# Network (NetworkManager brings wpa_supplicant for Wi-Fi)
+networkmanager
+networkmanager-openvpn
+avahi
+nss-mdns
+openssh
+inetutils
+bind               # dig, nslookup
+
+# Bluetooth stack (the desktop UI comes with Plasma)
+bluez
+bluez-utils
+
+# Tools and shell
+git
+rsync
+nano
+vim
+less
+zsh
+grml-zsh-config
+htop
+fastfetch
+man-db
+man-pages
+reflector
+xdg-user-dirs
+xdg-utils

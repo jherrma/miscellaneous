@@ -1,0 +1,8 @@
+# AUR packages, installed with paru by apps-setup.sh.
+# paru itself is bootstrapped by the script and does not belong in this list.
+# TODO: review each entry. These are the foreign packages found on the current machine.
+
+brave-bin
+libbdplus
+snapd
+synology-drive

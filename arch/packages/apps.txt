@@ -1,0 +1,12 @@
+# Native applications, installed by apps-setup.sh.
+# Flatpaks live in distro-independent/install-flatpaks.sh, AUR packages in aur.txt.
+
+flatpak
+firefox
+# Xournalpp is installed as a Flatpak (distro-independent/install-flatpaks.sh).
+
+# Blu-ray playback with mpv. libbdplus (BD+) is in aur.txt. You also need a
+# KEYDB.cfg in ~/.config/aacs (see fedora/setup-bluray-playback.sh).
+mpv
+libaacs
+libbluray
