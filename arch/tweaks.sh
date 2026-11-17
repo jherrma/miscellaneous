@@ -4,6 +4,8 @@
 #   * mirror refresh via reflector.timer
 #   * pacman hook that backs up /boot before kernel changes
 #   * zram swap (zram-generator) with sysctl tuning, replacing the AUR 'zramd'
+#   * journald size limit
+#   * disable services a desktop doesn't need (wait-online, auditd, acpid)
 #   * ufw firewall: deny incoming, allow outgoing
 #
 # This has to run on the booted system: a chroot has no netfilter, so ufw can't
@@ -19,6 +21,7 @@ ZRAM_SIZE="min(ram, 8192)"
 ZRAM_ALGORITHM="zstd(level=15)"
 SWAPPINESS=120
 PAGE_CLUSTER=0
+JOURNAL_MAX="200M"
 # -----------------------------------------------------------------------------
 
 sudo pacman -S --needed --noconfirm reflector rsync zram-generator ufw
@@ -72,6 +75,24 @@ sudo sysctl --system >/dev/null
 sudo systemctl daemon-reload
 sudo systemctl start systemd-zram-setup@zram0.service || \
   echo "zram0 could not be (re)started right now; it will be set up on the next boot."
+
+echo "journald: limit to $JOURNAL_MAX"
+sudo mkdir -p /etc/systemd/journald.conf.d
+sudo tee /etc/systemd/journald.conf.d/size.conf >/dev/null <<EOF
+[Journal]
+SystemMaxUse=$JOURNAL_MAX
+EOF
+sudo systemctl restart systemd-journald
+
+echo "Disabling services a desktop doesn't need"
+# wait-online only delays units ordered after network-online.target; nothing here needs that.
+# auditd/acpid are not installed by this setup, so they are only disabled if present.
+sudo systemctl disable NetworkManager-wait-online.service
+for svc in auditd.service acpid.service; do
+  if systemctl list-unit-files "$svc" --no-legend | grep -q .; then
+    sudo systemctl disable --now "$svc"
+  fi
+done
 
 echo "Firewall: ufw"
 sudo ufw default deny incoming

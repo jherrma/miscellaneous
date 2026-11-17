@@ -71,7 +71,7 @@ Then run, in this order:
 | Script | What it does |
 |---|---|
 | `desktop-setup.sh` | KDE Plasma + Plasma Login Manager, PipeWire audio, Wayland, Vulkan driver, KDE apps, fonts, printing |
-| `tweaks.sh` | mirror refresh timer, `/boot` backup hook, zram + sysctl tuning, ufw firewall (SSH allowed if sshd is enabled) |
+| `tweaks.sh` | mirror refresh timer, `/boot` backup hook, zram + sysctl tuning, journald size limit, unneeded services off, ufw firewall (SSH allowed if sshd is enabled) |
 | `apps-setup.sh` | `packages/apps.txt`, paru + `packages/aur.txt`, snapd + snaps, Flatpaks |
 | `install-neovim.sh` | Neovim and its configuration |
 
