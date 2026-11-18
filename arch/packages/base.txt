@@ -43,6 +43,7 @@ git
 rsync
 nano
 vim
+neovim
 less
 zsh
 grml-zsh-config

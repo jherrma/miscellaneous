@@ -9,7 +9,8 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 echo "Installing Neovim and build dependencies"
 # git: lazy.nvim clones itself and every plugin
 # base-devel: nvim-treesitter compiles its parsers locally
-sudo pacman -S --needed --noconfirm neovim git base-devel
+# tree-sitter-cli: nvim-treesitter calls the `tree-sitter` binary to build parsers
+sudo pacman -S --needed --noconfirm neovim git base-devel tree-sitter-cli
 
 # ZLS is the Zig language server this config wires up. It lives in the extra
 # repository; skip it silently on systems where it is unavailable.
