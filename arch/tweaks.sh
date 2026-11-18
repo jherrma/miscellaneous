@@ -6,6 +6,7 @@
 #   * zram swap (zram-generator) with sysctl tuning, replacing the AUR 'zramd'
 #   * journald size limit
 #   * disable services a desktop doesn't need (wait-online, auditd, acpid)
+#   * kernel audit off (audit=0 on the kernel command line)
 #   * ufw firewall: deny incoming, allow outgoing
 #
 # This has to run on the booted system: a chroot has no netfilter, so ufw can't
@@ -93,6 +94,17 @@ for svc in auditd.service acpid.service; do
     sudo systemctl disable --now "$svc"
   fi
 done
+
+echo "Kernel audit: audit=0"
+# auditd is off, so nothing drains the kernel audit queue and it only logs audit_lost.
+# Rewrite audit=1 to audit=0 once; grub-mkconfig is only run when the file changes.
+if grep -q ' audit=1 ' /etc/default/grub; then
+  sudo sed -i 's/ audit=1 / audit=0 /' /etc/default/grub
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
+  echo "audit=0 set; takes effect after the next reboot."
+else
+  echo "audit=1 not present in /etc/default/grub; nothing to change."
+fi
 
 echo "Firewall: ufw"
 sudo ufw default deny incoming
